@@ -1,0 +1,17 @@
+win32 release
+opengl32.lib;ws2_32.lib;ogg.lib;vorbis.lib;vorbisfile.lib;vorbisenc.lib;flac.lib;gdi32.lib;winmm.lib;jpeg.lib;freetype.lib;openal32.lib;sfml-network-s.lib;sfml-audio-s.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;
+
+linker includes
+$(SolutionDir)dependencies\SFML-2.4.2\lib
+
+win32 debug
+opengl32.lib;ws2_32.lib;ogg.lib;vorbis.lib;vorbisfile.lib;vorbisenc.lib;flac.lib;gdi32.lib;winmm.lib;jpeg.lib;freetype.lib;openal32.lib;sfml-network-s-d.lib;sfml-audio-s-d.lib;sfml-graphics-s-d.lib;sfml-system-s-d.lib;sfml-window-s-d.lib;
+
+addtl includes:
+$(ProjectDir)include\; $(SolutionDir)dependencies\SFML-2.4.2\include\
+
+output
+$(SolutionDir)bin\$(Platform)\$(Configuration)\
+
+intermediate
+$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\
