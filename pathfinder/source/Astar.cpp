@@ -89,7 +89,8 @@ void Astar::update()// algorithm logic
 
 void Astar::render(sf::RenderWindow & window)
 {
-	grid.draw(window);
+	window.draw(grid.m_gridDisplay);
+	//grid.draw(window);
 }
 
 void Astar::init(const bool custom)
@@ -98,6 +99,9 @@ void Astar::init(const bool custom)
 	//m_Rows = 40;
 	//m_Cols = 40;
 	
+	grid.m_xOffSet = (720 / m_Rows) * 0.95f;
+	grid.m_yOffSet = (720 / m_Rows) * 0.95f;
+
 	if (!custom)
 	{
 		grid.populateGrid(m_Rows, m_Cols);//create nodes.
@@ -109,8 +113,7 @@ void Astar::init(const bool custom)
 		m_end = grid.getNode(END_X, END_Y);
 	}
 
-	float m_squareWidth = (720 / m_Rows) * 0.95f;
-	float m_squareHeight = (720 / m_Rows) * 0.95f;
+	
 
 	//add nodes to closed set.
 	for (auto rowit = grid.m_Nodes.begin(); rowit != grid.m_Nodes.end(); rowit++)
@@ -129,7 +132,8 @@ void Astar::init(const bool custom)
 		}
 	}
 
-	createGridSquares(m_squareWidth, m_squareHeight);
+	grid.setNodeVertices();
+	//createGridSquares(m_squareWidth, m_squareHeight);
 
 	m_start->h = heuristic(m_start, m_end);
 	m_start->f = m_start->h;

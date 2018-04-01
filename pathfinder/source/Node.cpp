@@ -14,6 +14,10 @@ Node::Node(int& newx, int& newy)
 		
 		square.setFillColor(sf::Color::Black);
 	}
+	for (int i = 0; i < 4; i++)
+	{
+		m_vArray[i] = nullptr;
+	}
 }
 
 Node::~Node()
@@ -53,5 +57,13 @@ void Node::addNeighbors(std::vector<std::vector<std::shared_ptr<Node>>>& nodes, 
 	if (x < COLS - 1.0f && y < ROWS - 1.0f)
 	{
 		neighbors.push_back(nodes.at(x + 1.0f).at(y + 1.0f));
+	}
+}
+
+void Node::setColor(sf::Color newColor)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		m_vArray[i]->color = newColor;
 	}
 }
