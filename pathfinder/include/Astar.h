@@ -47,7 +47,7 @@ private:
 	std::vector<std::shared_ptr<Node>> closedSet;
 	std::vector<std::shared_ptr<Node>> path;
 	
-	void createGridSquares(float& w, float& h);
+	//void createGridSquares(float& w, float& h);
 	
 
 	void removeFromVector(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element);

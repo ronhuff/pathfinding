@@ -103,8 +103,8 @@ void Executive::startAstar()
 	}
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "A* Pathfinding Algorithm", sf::Style::Close);
-	window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(10);
+	//window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(1);
 
 	bool closed = false;
 

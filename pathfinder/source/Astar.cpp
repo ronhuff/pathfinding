@@ -32,7 +32,8 @@ void Astar::update()// algorithm logic
 			//find path.
 			m_isSolved = true;
 			m_isDone = true;
-			current->square.setFillColor(sf::Color::Blue);
+			//current->square.setFillColor(sf::Color::Blue);
+			current->setColor(sf::Color::Blue);
 			
 			reconstructPath(current->previous, current);
 			std::cout << "\nManhattan distance: " << abs(m_end->x - m_start->x) + abs(m_end->y - m_start->y) + 2 << " steps.\n";
@@ -192,29 +193,29 @@ float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
 	return (dx > dy ? dx : dy);*/
 }
 
-void Astar::createGridSquares(float& w, float& h)
-{
-	std::cout << "Creating grid squares...\n\n";
-	for (int i = 0; i < m_Rows; i++)
-	{
-		//TODO: Find out why only 9 boxes drawing.
-
-		for (int j = 0; j < m_Cols; j++)
-		{
-			auto node = grid.getNode(i, j);
-			float xpos = node->x * w;
-			float ypos = node->y * h;
-
-			sf::RectangleShape gridBox(sf::Vector2f(w, h));
-			//sf::CircleShape gridBox(w / 2);
-			gridBox.setPosition(xpos, ypos);
-			gridBox.move(15.0, 15.0);
-			gridBox.setOutlineColor(sf::Color::Black);
-			gridBox.setOutlineThickness(1.0);
-			node->square = gridBox;
-		}
-	}
-}
+//void Astar::createGridSquares(float& w, float& h)
+//{
+//	std::cout << "Creating grid squares...\n\n";
+//	for (int i = 0; i < m_Rows; i++)
+//	{
+//		//TODO: Find out why only 9 boxes drawing.
+//
+//		for (int j = 0; j < m_Cols; j++)
+//		{
+//			auto node = grid.getNode(i, j);
+//			float xpos = node->x * w;
+//			float ypos = node->y * h;
+//
+//			sf::RectangleShape gridBox(sf::Vector2f(w, h));
+//			//sf::CircleShape gridBox(w / 2);
+//			gridBox.setPosition(xpos, ypos);
+//			gridBox.move(15.0, 15.0);
+//			gridBox.setOutlineColor(sf::Color::Black);
+//			gridBox.setOutlineThickness(1.0);
+//			node->square = gridBox;
+//		}
+//	}
+//}
 
 void Astar::reconstructPath(std::shared_ptr<Node> previous, std::shared_ptr<Node> current)
 {
@@ -231,7 +232,8 @@ void Astar::setOpen()
 {
 	for (auto nit = openSet.begin(); nit != openSet.end(); nit++)
 	{
-		(*nit)->square.setFillColor(sf::Color::Green);
+		//(*nit)->square.setFillColor(sf::Color::Green);
+		(*nit)->setColor(sf::Color::Green);
 	}
 }
 
@@ -241,10 +243,12 @@ void Astar::setClosed()
 	{
 		if ((*nit)->wall)
 		{
-			(*nit)->square.setFillColor(sf::Color::Black);
+			(*nit)->setColor(sf::Color::Black);
+			//(*nit)->square.setFillColor(sf::Color::Black);
 			continue;
 		}
-		(*nit)->square.setFillColor(sf::Color::Red);
+		//(*nit)->square.setFillColor(sf::Color::Red);
+		(*nit)->setColor(sf::Color::Red);
 	}
 }
 
@@ -252,7 +256,8 @@ void Astar::setPath()
 {
 	for (auto nit = path.begin(); nit != path.end(); nit++)
 	{
-		(*nit)->square.setFillColor(sf::Color::Blue);
+		//(*nit)->square.setFillColor(sf::Color::Blue);
+		(*nit)->setColor(sf::Color::Blue);
 	}
 }
 

@@ -10,7 +10,7 @@
 
 class Node {
 public:
-	Node(int& newx, int& newy);
+	Node(int& newx, int& newy, sf::VertexArray& gridVArray);
 	~Node();
 
 	float x;
@@ -22,8 +22,11 @@ public:
 
 	bool wall;
 
-	sf::RectangleShape square;
-	sf::Vertex* m_vArray[4];
+	int m_1DIndex;
+
+	//sf::RectangleShape square;
+	//sf::Vertex* m_vArray[4];
+	sf::VertexArray& m_vArray;
 	std::vector<std::shared_ptr<Node>> neighbors;
 
 	std::shared_ptr<Node> previous;
