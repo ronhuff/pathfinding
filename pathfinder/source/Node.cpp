@@ -62,8 +62,9 @@ void Node::addNeighbors(std::vector<std::vector<std::shared_ptr<Node>>>& nodes, 
 
 void Node::setColor(sf::Color newColor)
 {
-	m_vArray[m_1DIndex].color = newColor;
-	m_vArray[m_1DIndex + 1].color = newColor;
-	m_vArray[m_1DIndex + 2].color = newColor;
-	m_vArray[m_1DIndex + 3].color = newColor;
+	//auto vtxIndex = m_vtxIndex - 4;
+	this->m_vArray[this->m_vtxIndex + 2].color = newColor;
+	this->m_vArray[this->m_vtxIndex + 3].color = newColor;
+	this->m_vArray[this->m_vtxIndex + 0].color = newColor;
+	this->m_vArray[this->m_vtxIndex + 1].color = newColor;
 }

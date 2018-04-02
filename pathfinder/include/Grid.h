@@ -22,6 +22,7 @@ public:
 	std::shared_ptr<Node>& getNode(const int& x, const int& y);
 
 	sf::VertexArray m_gridDisplay;
+	sf::VertexArray m_lines;
 
 	void setNodeVertices();
 

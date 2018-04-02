@@ -90,7 +90,22 @@ void Astar::update()// algorithm logic
 
 void Astar::render(sf::RenderWindow & window)
 {
+	sf::VertexArray lines(sf::Lines, 0);
+	float xOff = 0.0;
+	float yOff = 0.0;
+	for (int i = 0; i < m_Rows; i++)
+	{
+		
+		/*for (int j = 0; j < m_Cols; j++)
+		{
+			
+		}*/
+	}
+	
+	grid.getNode(0, m_Rows - 1)->setColor(sf::Color(0, 255, 255));
+	grid.getNode(m_Cols - 1, 0)->setColor(sf::Color(255, 255, 0));
 	window.draw(grid.m_gridDisplay);
+	window.draw(grid.m_lines);
 	//grid.draw(window);
 }
 
@@ -100,9 +115,6 @@ void Astar::init(const bool custom)
 	//m_Rows = 40;
 	//m_Cols = 40;
 	
-	grid.m_xOffSet = (720 / m_Rows) * 0.95f;
-	grid.m_yOffSet = (720 / m_Rows) * 0.95f;
-
 	if (!custom)
 	{
 		grid.populateGrid(m_Rows, m_Cols);//create nodes.
@@ -114,8 +126,9 @@ void Astar::init(const bool custom)
 		m_end = grid.getNode(END_X, END_Y);
 	}
 
-	
-
+	grid.m_xOffSet = (720.0f / float(m_Rows)) * 0.95f;
+	grid.m_yOffSet = (720.0f / float(m_Rows)) * 0.95f;
+	grid.setNodeVertices();
 	//add nodes to closed set.
 	for (auto rowit = grid.m_Nodes.begin(); rowit != grid.m_Nodes.end(); rowit++)
 	{
@@ -133,7 +146,6 @@ void Astar::init(const bool custom)
 		}
 	}
 
-	grid.setNodeVertices();
 	//createGridSquares(m_squareWidth, m_squareHeight);
 
 	m_start->h = heuristic(m_start, m_end);
@@ -182,7 +194,7 @@ float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
 {
 	//Euclidian Distance.
 	float d = sqrt(pow(abs(b->x - a->x), 2) + pow(abs(b->y - a->y), 2));
-	return(float(pow(2, d)));// returns a value of 2^(d) making the heuristic exponential for better accuracy.
+	return(float(pow(2, d)));// returns a value of d^(2) making the heuristic exponential for better accuracy.
 
 
 
@@ -233,7 +245,7 @@ void Astar::setOpen()
 	for (auto nit = openSet.begin(); nit != openSet.end(); nit++)
 	{
 		//(*nit)->square.setFillColor(sf::Color::Green);
-		(*nit)->setColor(sf::Color::Green);
+		(*nit)->setColor(sf::Color(30, 255, 30));
 	}
 }
 
@@ -243,12 +255,12 @@ void Astar::setClosed()
 	{
 		if ((*nit)->wall)
 		{
-			(*nit)->setColor(sf::Color::Black);
 			//(*nit)->square.setFillColor(sf::Color::Black);
+			(*nit)->setColor(sf::Color(15, 15, 15));
 			continue;
 		}
 		//(*nit)->square.setFillColor(sf::Color::Red);
-		(*nit)->setColor(sf::Color::Red);
+		(*nit)->setColor(sf::Color(255, 30, 30));
 	}
 }
 
@@ -257,7 +269,7 @@ void Astar::setPath()
 	for (auto nit = path.begin(); nit != path.end(); nit++)
 	{
 		//(*nit)->square.setFillColor(sf::Color::Blue);
-		(*nit)->setColor(sf::Color::Blue);
+		(*nit)->setColor(sf::Color(30, 30, 255));
 	}
 }
 

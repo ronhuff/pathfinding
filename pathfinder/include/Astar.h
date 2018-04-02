@@ -46,9 +46,6 @@ private:
 	std::vector<std::shared_ptr<Node>> openSet;
 	std::vector<std::shared_ptr<Node>> closedSet;
 	std::vector<std::shared_ptr<Node>> path;
-	
-	//void createGridSquares(float& w, float& h);
-	
 
 	void removeFromVector(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element);
 	bool vectorContains(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element);

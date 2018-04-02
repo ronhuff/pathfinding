@@ -104,7 +104,7 @@ void Executive::startAstar()
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "A* Pathfinding Algorithm", sf::Style::Close);
 	//window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(1);
+	window.setFramerateLimit(20);
 
 	bool closed = false;
 
@@ -130,14 +130,14 @@ void Executive::startAstar()
 
 		if (m_algorithm->isDone() && m_algorithm->isSolved() && !closed)
 		{
-			window.clear(sf::Color::Green);
+			window.clear(sf::Color(30, 255, 30));
 			m_algorithm->render(window);
 			window.display();
 			wait = true;
 		}
 		else if (m_algorithm->isDone() && !closed)
 		{
-			window.clear(sf::Color::Yellow);
+			window.clear(sf::Color(255, 255, 30));
 			m_algorithm->render(window);
 			window.display();
 			wait = true;

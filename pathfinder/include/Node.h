@@ -22,10 +22,8 @@ public:
 
 	bool wall;
 
-	int m_1DIndex;
+	int m_vtxIndex;
 
-	//sf::RectangleShape square;
-	//sf::Vertex* m_vArray[4];
 	sf::VertexArray& m_vArray;
 	std::vector<std::shared_ptr<Node>> neighbors;
 
