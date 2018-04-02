@@ -4,6 +4,11 @@
 
 Astar::Astar()
 {
+	m_Font.loadFromFile("arial.ttf");
+	m_TimeText.setCharacterSize(36);
+	m_TimeText.setFillColor(sf::Color::Black);
+	m_TimeText.setFont(m_Font);
+	m_TimeText.setPosition(sf::Vector2f(900, 200));
 }
 
 Astar::~Astar()
@@ -90,31 +95,19 @@ void Astar::update()// algorithm logic
 
 void Astar::render(sf::RenderWindow & window)
 {
-	sf::VertexArray lines(sf::Lines, 0);
-	float xOff = 0.0;
-	float yOff = 0.0;
-	for (int i = 0; i < m_Rows; i++)
-	{
-		
-		/*for (int j = 0; j < m_Cols; j++)
-		{
-			
-		}*/
-	}
-	
-	grid.getNode(0, m_Rows - 1)->setColor(sf::Color(0, 255, 255));
-	grid.getNode(m_Cols - 1, 0)->setColor(sf::Color(255, 255, 0));
-	window.draw(grid.m_gridDisplay);
+	m_Timer.restart();
+	window.draw(grid.m_gridDisplay);	
 	window.draw(grid.m_lines);
-	//grid.draw(window);
+	auto elapsed = m_Timer.getElapsedTime();
+	float milliseconds = elapsed.asSeconds();
+	std::string fstring = std::to_string(milliseconds);
+	m_TimeText.setString(fstring);
+
+	window.draw(m_TimeText);
 }
 
 void Astar::init(const bool custom)
 {
-	//
-	//m_Rows = 40;
-	//m_Cols = 40;
-	
 	if (!custom)
 	{
 		grid.populateGrid(m_Rows, m_Cols);//create nodes.
@@ -142,11 +135,8 @@ void Astar::init(const bool custom)
 			{
 				closedSet.push_back((*nodeit));
 			}
-
 		}
 	}
-
-	//createGridSquares(m_squareWidth, m_squareHeight);
 
 	m_start->h = heuristic(m_start, m_end);
 	m_start->f = m_start->h;
@@ -154,6 +144,18 @@ void Astar::init(const bool custom)
 	m_start->wall = false;
 	m_end->wall = false;
 	openSet.push_back(m_start);
+	int count = 0;
+	for (int i = 0; i < m_Rows; i++)
+	{
+		for (int j = 0; j < m_Cols; j++)
+		{
+			if (grid.getNode(i, j)->wall)
+			{
+				count++;
+			}
+		}
+	}
+	std::cout << "Number of walls: " << count << " Percentage: " << (float(count) / (float(m_Rows) * float(m_Cols))) * 100.0f << '\n';
 }
 
 void Astar::setCustom(const int array[6])
@@ -162,8 +164,7 @@ void Astar::setCustom(const int array[6])
 	m_Cols = array[1];
 	grid.populateGrid(m_Rows, m_Cols);
 	m_start = grid.getNode(array[2], array[3]);
-	m_end = grid.getNode(array[4], array[5]);
-	
+	m_end = grid.getNode(array[4], array[5]);	
 }
 
 void Astar::removeFromVector(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element)
@@ -193,10 +194,8 @@ bool Astar::vectorContains(std::vector<std::shared_ptr<Node>>& vector, std::shar
 float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
 {
 	//Euclidian Distance.
-	float d = sqrt(pow(abs(b->x - a->x), 2) + pow(abs(b->y - a->y), 2));
-	return(float(pow(2, d)));// returns a value of d^(2) making the heuristic exponential for better accuracy.
-
-
+	float d = sqrt(float(pow(abs(b->x - a->x), 2.0f)) + float(pow(abs(b->y - a->y), 2.0f)));
+	return(float(pow(d + 1.0f, 2.0f)));// returns a value of (d + 1)^2 adding additional accuracy to the heuristic
 
 	//Manhattan Distance.
 	/*auto dx = abs(b->x - a->x);
@@ -204,30 +203,6 @@ float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
 
 	return (dx > dy ? dx : dy);*/
 }
-
-//void Astar::createGridSquares(float& w, float& h)
-//{
-//	std::cout << "Creating grid squares...\n\n";
-//	for (int i = 0; i < m_Rows; i++)
-//	{
-//		//TODO: Find out why only 9 boxes drawing.
-//
-//		for (int j = 0; j < m_Cols; j++)
-//		{
-//			auto node = grid.getNode(i, j);
-//			float xpos = node->x * w;
-//			float ypos = node->y * h;
-//
-//			sf::RectangleShape gridBox(sf::Vector2f(w, h));
-//			//sf::CircleShape gridBox(w / 2);
-//			gridBox.setPosition(xpos, ypos);
-//			gridBox.move(15.0, 15.0);
-//			gridBox.setOutlineColor(sf::Color::Black);
-//			gridBox.setOutlineThickness(1.0);
-//			node->square = gridBox;
-//		}
-//	}
-//}
 
 void Astar::reconstructPath(std::shared_ptr<Node> previous, std::shared_ptr<Node> current)
 {

@@ -35,8 +35,12 @@ private:
 	float m_squareWidth;
 	float m_squareHeight;
 
-	Grid grid;
+	sf::Clock m_Timer;
 
+	sf::Font m_Font;
+	sf::Text m_TimeText;
+
+	Grid grid;
 	bool m_isDone = false;
 	bool m_isSolved = false;
 

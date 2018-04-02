@@ -7,17 +7,12 @@ Node::Node(int& newx, int& newy, sf::VertexArray& gridVArray)
 	previous = nullptr;
 	//square.setFillColor(sf::Color::Transparent);
 
-	auto randNum = rand() % 10;
-	if (randNum < 4) // 40% chance per node that it will be a wall.
+	float randNum = rand() % 100;
+	//std::cout << randNum << '\n';
+	if (randNum < 43) // 43% chance per node that it will be a wall.
 	{
 		wall = true;
-		
-		//square.setFillColor(sf::Color::Black);
 	}
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	m_vArray[i] = nullptr;
-	//}
 }
 
 Node::~Node()

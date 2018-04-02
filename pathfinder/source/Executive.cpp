@@ -103,8 +103,8 @@ void Executive::startAstar()
 	}
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "A* Pathfinding Algorithm", sf::Style::Close);
-	//window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(20);
+	window.setVerticalSyncEnabled(true);
+	//window.setFramerateLimit(17);
 
 	bool closed = false;
 
@@ -144,7 +144,7 @@ void Executive::startAstar()
 		}
 		else
 		{
-			window.clear(sf::Color::White);
+			window.clear(sf::Color(245, 245, 255));
 		}
 		if (!wait)
 		{
@@ -191,7 +191,7 @@ int Executive::getRowsFromUser()
 	std::cout << "Enter grid size(100 max): ";
 	int userRows;
 	validateInteger(std::cin, userRows);
-	while (userRows > 100 || userRows < 4)
+	while (userRows > 300 || userRows < 4)
 	{
 		validateInteger(std::cin, userRows, "Please keep the size between 4 & 100\n");
 	}

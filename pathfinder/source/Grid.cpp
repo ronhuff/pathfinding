@@ -37,7 +37,7 @@ void Grid::populateGrid(const int& rows, const int& cols)
 			for (int k = 0; k < 4; k++)
 			{
 				//add vertices
-				sf::Vertex temp(sf::Vector2f(0.0f, 0.0f), sf::Color::White);
+				sf::Vertex temp(sf::Vector2f(0.0f, 0.0f), sf::Color(245, 245, 255));
 				m_gridDisplay.append(temp);
 				if (k == 0)
 				{
@@ -81,13 +81,10 @@ void Grid::setNodeVertices()
 	std::cout << "Setting Node Vertices...\n\n";
 	for (int i = 0; i < m_Rows; i++)
 	{
-		//TODO: Find out why only 9 boxes drawing.
-		
 		sf::Vertex vtx(sf::Vector2f(getNode(i, 0)->x * m_xOffSet, 0), sf::Color::Black);
 		m_lines.append(vtx);
 
 		vtx = sf::Vertex(sf::Vector2f(getNode(i, 0)->x * m_xOffSet, 684.0f), sf::Color::Black);
-		
 		m_lines.append(vtx);
 
 		for (int j = 0; j < m_Cols; j++)
@@ -120,58 +117,20 @@ void Grid::setNodeVertices()
 			{
 				vtx = sf::Vertex(sf::Vector2f(1.0f, getNode(0, j)->y * m_yOffSet), sf::Color::Black);
 				m_lines.append(vtx);
+				
 				vtx = sf::Vertex(sf::Vector2f(720.0f * 0.95f, getNode(0, j)->y * m_yOffSet), sf::Color::Black);
-
 				m_lines.append(vtx);
-
 			}
-
 
 			auto node = getNode(i, j);
 			float xpos = node->x * m_xOffSet;
 			float ypos = node->y * m_yOffSet;
 
-
-			//sf::RectangleShape gridBox(sf::Vector2f(w, h));
-			//sf::CircleShape gridBox(w / 2);
-			//gridBox.setPosition(xpos, ypos);
-			//gridBox.move(15.0, 15.0);
-			//gridBox.setOutlineColor(sf::Color::Black);
-			//gridBox.setOutlineThickness(1.0);
-			//node->square = gridBox;
-
-
-			int index = (j * m_Cols) + i;
-			for (int k = 0; k < 4; k++)
-			{
-				//node.
-				//m_gridDisplay[index + k] = sf::Vertex(0.0f,0.0f);
-				//sf::Vertex vtx(sf::Vector2f(0.0f, 0.0f));
-				//m_gridDisplay.append(vtx);
-				//node->m_vArray[k] = &m_gridDisplay[index + k];
-			}
-
-
-
-			//std::cout << node->m_vArray[node->m_1DIndex].position.y << '\n';
-			//std::cout << m_gridDisplay[0].position.y << '\n';
-
 			node->m_vArray[node->m_vtxIndex + 2].position = sf::Vector2f(xpos + 0.5f, ypos + 0.5f);
 			node->m_vArray[node->m_vtxIndex + 3].position = sf::Vector2f(xpos + m_xOffSet - 0.5f, ypos + 0.5f);
 			node->m_vArray[node->m_vtxIndex + 0].position = sf::Vector2f(xpos + m_xOffSet - 0.5f, ypos + m_yOffSet - 0.5f);
 			node->m_vArray[node->m_vtxIndex + 1].position = sf::Vector2f(xpos + 0.5f, ypos + m_yOffSet - 0.5f);
-			node->setColor(sf::Color::White);
-		}
-	}
-}
-
-void Grid::draw(sf::RenderWindow& window) //draws the current state of the grid.
-{
-	for (int i = 0; i < m_Cols; i++)
-	{
-		for (int j = 0; j < m_Rows; j++)
-		{
-			//window.draw(getNode(i, j)->square);
+			node->setColor(sf::Color(245, 245, 255));
 		}
 	}
 }

@@ -27,7 +27,4 @@ public:
 	void setNodeVertices();
 
 	std::vector<std::vector<std::shared_ptr<Node>>> m_Nodes;
-
-	void draw(sf::RenderWindow& window);
-
 };
