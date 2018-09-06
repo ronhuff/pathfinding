@@ -32,7 +32,7 @@ bool Executive::run()
 
 		return(false);
 	}
-	return(false);
+	return(true);
 }
 
 void Executive::startAstar()
@@ -49,52 +49,7 @@ void Executive::startAstar()
 	m_algorithm = std::make_unique<Astar>();
 	if (input == 2)
 	{
-		//User defined algo here.
-		std::cout << "\n-== Define grid specifications ==-\n";
-		int userRows = getRowsFromUser();
-		int userCols = userRows; // getColsFromUser(); change this back once non-square grids are allowed.
-
-		std::cout << "\nPlease enter beginning index values(e.g. x = 1, y = 1).\nNote: The first index is (1, 1) and the final is (" << userRows << ", " << userCols << ").\n";
-		std::cout << "\nBeginning Index:\nx = ";
-		int userX;
-		int userY;
-		//set begin cell.
-		validateInteger(std::cin, userX);
-		while (userX > userRows || userX < 1)
-		{
-			validateInteger(std::cin, userX, "Value for x must be between 1 and " + std::to_string(userRows) + ".");
-		}
-		std::cout << "\nBeginning Index:\ny = ";
-		validateInteger(std::cin, userY);
-		while (userY > userCols || userY < 1)
-		{
-			validateInteger(std::cin, userY, "Value for y must be between 1 and " + std::to_string(userCols) + ".");
-		}
-
-		int userEndX = 0;
-		int userEndY = 0;
-
-		std::cout << "\nPlease enter ending index values(e.g. x = 1, y = 1).\nNote: The first index is (1, 1) and the final is (" << userRows << ", " << userCols << ").\n";
-		std::cout << "\nEnding Index:\nx = ";
-
-		//set end cell.
-		validateInteger(std::cin, userEndX);
-		while (userEndX > userRows || userEndX < 1)
-		{
-			validateInteger(std::cin, userEndX, "Value for x must be between 1 and " + std::to_string(userRows) + ".");
-		}
-
-		std::cout << "\nEnding Index:\ny = ";
-		validateInteger(std::cin, userEndY);
-		while (userEndY > userCols || userEndY < 1)
-		{
-			validateInteger(std::cin, userEndY, "Value for y must be between 1 and " + std::to_string(userCols) + ".");
-		}
-		const int pointIndexes[6] = { userRows, userCols, userX - 1, userY - 1, userEndX - 1, userEndY - 1 };
-		
-		m_algorithm->setCustom(pointIndexes);
-		m_algorithm->init(true);
-		std::cout << "Finding shortest route from position (" << userX << ", " << userY << ") to position (" << userEndX << ", " << userEndY << ").\n";
+		GetUserSpecifications();//grid size, starting/ending index
 	}
 	else if (input == 1)
 	{
@@ -104,7 +59,7 @@ void Executive::startAstar()
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "A* Pathfinding Algorithm", sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(17);
+	//window.setFramerateLimit(10);
 
 	bool closed = false;
 
@@ -156,6 +111,69 @@ void Executive::startAstar()
 	window.close();	
 }
 
+void Executive::GetUserSpecifications()
+{
+	//User defined algo here.
+	std::cout << "\n-== Define grid specifications ==-\n";
+	int userRows = getRowsFromUser();
+	int userCols = userRows; // getColsFromUser(); change this back once non-square grids are allowed.
+
+	std::cout << "\nPlease enter beginning index values(e.g. x = 1, y = 1).\nNote: The first index is (1, 1) and the final is (" << userRows << ", " << userCols << ").\n";
+	std::cout << "\nBeginning Index:\nx = ";
+	int userX;
+	int userY;
+	//set begin cell.
+	validateInteger(std::cin, userX);
+	while (userX > userRows || userX < 1)
+	{
+		validateInteger(std::cin, userX, "Value for x must be between 1 and " + std::to_string(userRows) + ".");
+	}
+	std::cout << "\nBeginning Index:\ny = ";
+	validateInteger(std::cin, userY);
+	while (userY > userCols || userY < 1)
+	{
+		validateInteger(std::cin, userY, "Value for y must be between 1 and " + std::to_string(userCols) + ".");
+	}
+
+	int userEndX = 0;
+	int userEndY = 0;
+
+	std::cout << "\nPlease enter ending index values(e.g. x = 1, y = 1).\nNote: The first index is (1, 1) and the final is (" << userRows << ", " << userCols << ").\n";
+	std::cout << "\nEnding Index:\nx = ";
+
+	//set end cell.
+	validateInteger(std::cin, userEndX);
+	while (userEndX > userRows || userEndX < 1)
+	{
+		validateInteger(std::cin, userEndX, "Value for x must be between 1 and " + std::to_string(userRows) + ".");
+	}
+
+	std::cout << "\nEnding Index:\ny = ";
+	validateInteger(std::cin, userEndY);
+	while (userEndY > userCols || userEndY < 1)
+	{
+		validateInteger(std::cin, userEndY, "Value for y must be between 1 and " + std::to_string(userCols) + ".");
+	}
+	const int pointIndexes[6] = { userRows, userCols, userX - 1, userY - 1, userEndX - 1, userEndY - 1 };
+	
+	std::cout << "\nPlease choose a heuristic for distance.\n";
+	std::cout << "1) Euclidian Distance.\n";
+	std::cout << "2) Manhattan Distance.\n";
+	int hChoice;
+	validateInteger(std::cin, hChoice);
+	if (hChoice == 1)
+	{
+		m_algorithm->setHeuristicFlag(true);
+	}
+	else
+	{
+		m_algorithm->setHeuristicFlag(false);
+	}
+	m_algorithm->setCustom(pointIndexes);
+	m_algorithm->init(true);
+	std::cout << "Finding shortest route from position (" << userX << ", " << userY << ") to position (" << userEndX << ", " << userEndY << ").\n";
+}
+
 void Executive::validateInteger(std::istream& input, int& variable, const std::string& rangeWarning)
 {
 	if (rangeWarning != "")
@@ -191,7 +209,7 @@ int Executive::getRowsFromUser()
 	std::cout << "Enter grid size(100 max): ";
 	int userRows;
 	validateInteger(std::cin, userRows);
-	while (userRows > 300 || userRows < 4)
+	while (userRows > 1000 || userRows < 4)
 	{
 		validateInteger(std::cin, userRows, "Please keep the size between 4 & 100\n");
 	}

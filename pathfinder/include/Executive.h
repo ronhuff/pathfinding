@@ -24,6 +24,7 @@ public:
 
 	bool run();
 	void startAstar();
+	void GetUserSpecifications();
 	void validateInteger(std::istream& stream, int& input, const std::string& rangeWarning = "");
 	void validateFloat(std::istream& input, float& variable, const std::string& rangeWarning);
 

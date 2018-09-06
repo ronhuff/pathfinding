@@ -21,6 +21,8 @@ public:
 	virtual void update();
 	virtual void render(sf::RenderWindow &window);
 
+	void setHeuristicFlag(bool newFlag);
+
 private:
 
 	virtual void setCustom(const int array[6]);
@@ -54,7 +56,8 @@ private:
 	void removeFromVector(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element);
 	bool vectorContains(std::vector<std::shared_ptr<Node>>& vector, std::shared_ptr<Node>& element);
 
-	float heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b);
+	bool m_heuristicFlag = true;
+	float heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b, bool flag);
 
 	void setOpen();
 	void setClosed();

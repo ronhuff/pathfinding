@@ -78,7 +78,7 @@ void Astar::update()// algorithm logic
 			// This path is the best until now, Record it.
 			(*neighborit)->previous = current;
 			(*neighborit)->g = tempg;
-			(*neighborit)->f = (*neighborit)->g + heuristic((*neighborit), m_end);
+			(*neighborit)->f = (*neighborit)->g + heuristic((*neighborit), m_end, m_heuristicFlag);
 		}
 		setOpen();
 		setClosed();
@@ -100,10 +100,18 @@ void Astar::render(sf::RenderWindow & window)
 	window.draw(grid.m_lines);
 	auto elapsed = m_Timer.getElapsedTime();
 	float milliseconds = elapsed.asSeconds();
-	std::string fstring = std::to_string(milliseconds);
+	std::string fstring = std::to_string(std::floor(1.0f / milliseconds));
+	fstring.erase(fstring.find_last_not_of('0') + 1, std::string::npos);
+	fstring.pop_back();
+	fstring += "\nRenders per second.\n";
 	m_TimeText.setString(fstring);
 
 	window.draw(m_TimeText);
+}
+
+void Astar::setHeuristicFlag(bool newFlag)
+{
+	m_heuristicFlag = newFlag;
 }
 
 void Astar::init(const bool custom)
@@ -138,7 +146,7 @@ void Astar::init(const bool custom)
 		}
 	}
 
-	m_start->h = heuristic(m_start, m_end);
+	m_start->h = heuristic(m_start, m_end, m_heuristicFlag);
 	m_start->f = m_start->h;
 	m_start->g = 0.0;
 	m_start->wall = false;
@@ -191,17 +199,22 @@ bool Astar::vectorContains(std::vector<std::shared_ptr<Node>>& vector, std::shar
 	return(false);
 }
 
-float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
+float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b, bool flag)
 {
-	//Euclidian Distance.
-	float d = sqrt(float(pow(abs(b->x - a->x), 2.0f)) + float(pow(abs(b->y - a->y), 2.0f)));
-	return(float(pow(d + 1.0f, 2.0f)));// returns a value of (d + 1)^2 adding additional accuracy to the heuristic
+	if (flag)
+	{
+		//Euclidian Distance.
+		float d = sqrt(float(pow(abs(b->x - a->x), 2.0f)) + float(pow(abs(b->y - a->y), 2.0f)));
+		return(float(pow(d + 1.0f, 2.0f)));// returns a value of (d + 1)^2 adding additional accuracy to the heuristic
+	}
+	else
+	{
+		//Manhattan Distance.
+		auto dx = abs(b->x - a->x);
+		auto dy = abs(b->y - a->y);
+		return (dx > dy ? dx : dy);
+	}
 
-	//Manhattan Distance.
-	/*auto dx = abs(b->x - a->x);
-	auto dy = abs(b->y - a->y);
-
-	return (dx > dy ? dx : dy);*/
 }
 
 void Astar::reconstructPath(std::shared_ptr<Node> previous, std::shared_ptr<Node> current)

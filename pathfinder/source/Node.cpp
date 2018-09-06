@@ -9,7 +9,7 @@ Node::Node(int& newx, int& newy, sf::VertexArray& gridVArray)
 
 	float randNum = rand() % 100;
 	//std::cout << randNum << '\n';
-	if (randNum < 43) // 43% chance per node that it will be a wall.
+	if (randNum < 37) // 43% chance per node that it will be a wall.
 	{
 		wall = true;
 	}

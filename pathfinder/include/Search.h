@@ -16,5 +16,6 @@ public:
 	virtual bool isSolved() const = 0;
 
 	virtual void setCustom(const int array[6]) = 0;
+	virtual void setHeuristicFlag(bool newFlag) = 0;
 };
 
