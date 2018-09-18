@@ -27,3 +27,5 @@ Here we can see the where the application has successfully executed the algorith
 - The ability to compare different algorithms & heuristics on the same grid/wall configuration.
 - Move some of the user input to the GUI using the mouse.
 - Statistical output alongside the grid.
+
+##### [Difficulty building?](https://github.com/ronhuff/pathfinding/wiki/Visual-Studio-Project-Settings)
