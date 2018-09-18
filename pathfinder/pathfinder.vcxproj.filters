@@ -33,7 +33,7 @@
     <ClCompile Include="source\Executive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SFMLApplication.cpp">
+    <ClCompile Include="source\SFMLApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

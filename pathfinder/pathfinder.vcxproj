@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SFMLApplication.cpp" />
+    <ClCompile Include="source\SFMLApplication.cpp" />
     <ClCompile Include="source\Astar.cpp" />
     <ClCompile Include="source\Executive.cpp" />
     <ClCompile Include="source\Grid.cpp" />
