@@ -9,7 +9,7 @@ public:
 	SFMLApplication();
 	virtual ~SFMLApplication();
 
-	virtual void update();
+	virtual bool update() = 0;
 	virtual void render(sf::RenderWindow &window);
 
 	virtual bool isDone() const = 0;

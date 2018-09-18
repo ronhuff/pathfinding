@@ -1,20 +1,14 @@
 #include "..\include\Grid.h"
 Grid::Grid()
-	:m_gridDisplay(sf::Quads, 0), m_lines(sf::Lines, 0)
+	:gridDisplay(sf::Quads, 0), lines(sf::Lines, 0)
 {
-	//for (int k = 0; k < 4; k++)
-	//{
-	//	//add vertices
-	//	sf::Vertex temp(sf::Vector2f(0.0f, 0.0f), sf::Color::White);
-	//	m_gridDisplay.append(temp);
-	//}
 }
 
 Grid::~Grid()
 {
 	for (int i = 0; i < m_Rows; i++)
 	{
-		m_Nodes.pop_back();
+		nodes.pop_back();
 	}
 }
 
@@ -29,7 +23,7 @@ void Grid::populateGrid(const int& rows, const int& cols)
 	for (int i = 0; i < m_Cols; i++)
 	{
 		std::vector<std::shared_ptr<Node>> tempVec;
-		m_Nodes.push_back(tempVec);
+		nodes.push_back(tempVec);
 		for (int j = 0; j < m_Rows; j++)
 		{
 
@@ -38,7 +32,7 @@ void Grid::populateGrid(const int& rows, const int& cols)
 			{
 				//add vertices
 				sf::Vertex temp(sf::Vector2f(0.0f, 0.0f), sf::Color(245, 245, 255));
-				m_gridDisplay.append(temp);
+				gridDisplay.append(temp);
 				if (k == 0)
 				{
 
@@ -52,9 +46,16 @@ void Grid::populateGrid(const int& rows, const int& cols)
 					//std::cout << "One dimensional index: " << m_Nodes.at(i).back()->m_1DIndex << '\n';
 				}
 			}
-			m_Nodes.at(i).push_back(std::make_shared<Node>(i, j, m_gridDisplay));
+			nodes.at(i).push_back(std::make_shared<Node>(i, j, gridDisplay));
+			int randNum = rand() % 100;
+			//std::cout << randNum << '\n';
+			if (randNum < WALL_CHANCE) // 43% chance per node that it will be a wall.
+			{
+				nodes.at(i).back()->wall = true;
+			}
+			
 			//std::cout << m_gridDisplay.getVertexCount() << '\n' << m_gridDisplay.getVertexCount() - 1 << '\n';
-			m_Nodes.at(i).back()->m_vtxIndex = (m_gridDisplay.getVertexCount() - 4);
+			nodes.at(i).back()->m_vtxIndex = (gridDisplay.getVertexCount() - 4);
 			count++;
 				//m_Nodes.at(i).back()->m_vArray[k] = 
 				//m_Nodes.at(i).back()->m_vArray[k] = &m_gridDisplay[m_gridDisplay.getVertexCount() - 1];
@@ -66,14 +67,14 @@ void Grid::populateGrid(const int& rows, const int& cols)
 	{
 		for (int j = 0; j < m_Cols; j++)
 		{
-			m_Nodes.at(i).at(j)->addNeighbors(m_Nodes, rows, cols);
+			nodes.at(i).at(j)->addNeighbors(nodes, rows, cols);
 		}
 	}
 }
 
 std::shared_ptr<Node>& Grid::getNode(const int& x, const int& y)
 {
-	return(m_Nodes.at(x).at(y));
+	return(nodes.at(x).at(y));
 }
 
 void Grid::setNodeVertices()
@@ -82,44 +83,44 @@ void Grid::setNodeVertices()
 	for (int i = 0; i < m_Rows; i++)
 	{
 		sf::Vertex vtx(sf::Vector2f(getNode(i, 0)->x * m_xOffSet, 0), sf::Color::Black);
-		m_lines.append(vtx);
+		lines.append(vtx);
 
 		vtx = sf::Vertex(sf::Vector2f(getNode(i, 0)->x * m_xOffSet, 684.0f), sf::Color::Black);
-		m_lines.append(vtx);
+		lines.append(vtx);
 
 		for (int j = 0; j < m_Cols; j++)
 		{
 			if (j == 0)
 			{
 				sf::Vertex vtx1(sf::Vector2f(1.0f, 1.0f), sf::Color::Black);//top line.
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 				vtx1 = sf::Vertex(sf::Vector2f(684.0f, 1.0f), sf::Color::Black);//top line
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 
 				vtx1 = sf::Vertex(sf::Vector2f(1.0f, 684.0f), sf::Color::Black);//bottom line.
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 				vtx1 = sf::Vertex(sf::Vector2f(684.0f, 684.0f), sf::Color::Black);//bottom line.
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 
 
 				vtx1 = sf::Vertex(sf::Vector2f(1.0f, 1.0f), sf::Color::Black);//left Line
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 				vtx1 = sf::Vertex(sf::Vector2f(1.0f, 684.0f), sf::Color::Black);//left line
-				m_lines.append(vtx1);
+				lines.append(vtx1);
 
 				vtx1 = sf::Vertex(sf::Vector2f(684.0f, 1.0f), sf::Color::Black);//right line
-				m_lines.append(vtx1);
-				vtx1 = sf::Vertex(sf::Vector2f(684.0f, 684.04), sf::Color::Black);//right line
-				m_lines.append(vtx1);
+				lines.append(vtx1);
+				vtx1 = sf::Vertex(sf::Vector2f(684.0f, 684.04f), sf::Color::Black);//right line
+				lines.append(vtx1);
 			}
 
 			if (i == 0)
 			{
 				vtx = sf::Vertex(sf::Vector2f(1.0f, getNode(0, j)->y * m_yOffSet), sf::Color::Black);
-				m_lines.append(vtx);
+				lines.append(vtx);
 				
 				vtx = sf::Vertex(sf::Vector2f(720.0f * 0.95f, getNode(0, j)->y * m_yOffSet), sf::Color::Black);
-				m_lines.append(vtx);
+				lines.append(vtx);
 			}
 
 			auto node = getNode(i, j);

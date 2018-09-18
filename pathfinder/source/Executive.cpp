@@ -1,15 +1,5 @@
 #include "..\include\Executive.h"
 
-Executive::Executive()
-{
-}
-
-
-Executive::~Executive()
-{
-}
-
-
 bool Executive::run()
 {
 	std::cout << "-== Algorithms! ==-\n\n";
@@ -25,45 +15,25 @@ bool Executive::run()
 	}
 	if (input == 1)
 	{
-		startAstar();
+		getUserSpecifications();
+		runAstar();
 	}
 	else if (input == 2)
 	{
-
 		return(false);
 	}
 	return(true);
 }
 
-void Executive::startAstar()
+void Executive::runAstar()
 {
-	std::cout << "\nDo you wish to specify your own parameters or choose the default?(40x40, top left -> bottom right)\n";
-	std::cout << "1) Default.\n";
-	std::cout << "2) Specify my own.\n";
-	int input;
-	validateInteger(std::cin, input);
-	while (input > 2 || input < 1)
-	{
-		validateInteger(std::cin, input);
-	}
-	m_algorithm = std::make_unique<Astar>();
-	if (input == 2)
-	{
-		GetUserSpecifications();//grid size, starting/ending index
-	}
-	else if (input == 1)
-	{
-		m_algorithm->init(false);
-		std::cout << "Finding shortest route from position (1, 1) to position (40, 40)...\n";
-	}
-
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "A* Pathfinding Algorithm", sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(10);
+	window.setFramerateLimit(30);
 
 	bool closed = false;
-
 	bool wait = false;
+
 	while (!closed)
 	{
 		sf::Event event;
@@ -103,7 +73,7 @@ void Executive::startAstar()
 		}
 		if (!wait)
 		{
-			m_algorithm->update(); // steps the algorithm
+			m_algorithm->update();
 			m_algorithm->render(window);
 			window.display();
 		}
@@ -111,18 +81,39 @@ void Executive::startAstar()
 	window.close();	
 }
 
-void Executive::GetUserSpecifications()
+void Executive::getUserSpecifications()
 {
-	//User defined algo here.
+	std::cout << "\nDo you wish to specify your own parameters or choose the default?(50x50, top left -> bottom right)\n";
+	std::cout << "1) Default.\n";
+	std::cout << "2) Specify my own.\n";
+	int input;
+	validateInteger(std::cin, input);
+	while (input > 2 || input < 1)
+	{
+		validateInteger(std::cin, input);
+	}
+	m_algorithm = std::make_unique<Astar>();
+	if (input == 2)
+	{
+		getSizeAndIndex();//grid size, starting/ending index
+	}
+	else if (input == 1)
+	{
+		m_algorithm->init(false);
+		std::cout << "Finding shortest route from position (1, 1) to position (50, 50)...\n";
+	}
+}
+
+void Executive::getSizeAndIndex()
+{
 	std::cout << "\n-== Define grid specifications ==-\n";
 	int userRows = getRowsFromUser();
-	int userCols = userRows; // getColsFromUser(); change this back once non-square grids are allowed.
+	int userCols = userRows;
 
 	std::cout << "\nPlease enter beginning index values(e.g. x = 1, y = 1).\nNote: The first index is (1, 1) and the final is (" << userRows << ", " << userCols << ").\n";
 	std::cout << "\nBeginning Index:\nx = ";
 	int userX;
 	int userY;
-	//set begin cell.
 	validateInteger(std::cin, userX);
 	while (userX > userRows || userX < 1)
 	{
@@ -205,11 +196,11 @@ void Executive::validateFloat(std::istream& input, float& variable, const std::s
 
 int Executive::getRowsFromUser()
 {
-	std::cout << "We are currently only able to support square grids (e.g. 10 x 10, 50 x 10, etc.)\n";
-	std::cout << "Enter grid size(100 max): ";
+	std::cout << "We are currently only able to support square grids (e.g. 10 x 10, 50 x 50, etc.)\n";
+	std::cout << "Enter grid size(225 max): ";
 	int userRows;
 	validateInteger(std::cin, userRows);
-	while (userRows > 1000 || userRows < 4)
+	while (userRows > 225 || userRows < 4)
 	{
 		validateInteger(std::cin, userRows, "Please keep the size between 4 & 100\n");
 	}

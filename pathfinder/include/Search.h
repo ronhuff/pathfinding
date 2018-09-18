@@ -5,12 +5,12 @@ class Search :
 	public SFMLApplication
 {
 public:
-	Search();
-	virtual ~Search();
+	Search() = default;
+	virtual ~Search() = default;
 
 	virtual void init(bool custom) = 0;
 
-	virtual void update();
+	virtual bool update() = 0;
 	virtual void render(sf::RenderWindow &window);
 	virtual bool isDone() const = 0;
 	virtual bool isSolved() const = 0;

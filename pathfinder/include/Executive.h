@@ -10,21 +10,22 @@
 class Executive
 {
 public:
-	Executive();
-	~Executive();
+	Executive() = default;
+	~Executive() = default;
 
 
 	//Interface details.
 
-	const float m_SCREEN_WIDTH = 1280;
-	const float m_SCREEN_HEIGHT = 720;
+	const float SCREEN_WIDTH = 1280;
+	const float SCREEN_HEIGHT = 720;
 	
 	std::unique_ptr<Search> m_algorithm;
 	sf::RenderWindow window;
 
 	bool run();
-	void startAstar();
-	void GetUserSpecifications();
+	void runAstar();
+	void getUserSpecifications();
+	void getSizeAndIndex();
 	void validateInteger(std::istream& stream, int& input, const std::string& rangeWarning = "");
 	void validateFloat(std::istream& input, float& variable, const std::string& rangeWarning);
 

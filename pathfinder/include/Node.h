@@ -11,7 +11,7 @@
 class Node {
 public:
 	Node(int& newx, int& newy, sf::VertexArray& gridVArray);
-	~Node();
+	~Node() = default;
 
 	float x;
 	float y;
@@ -20,7 +20,9 @@ public:
 	float g;
 	float h;
 
+
 	bool wall;
+	bool explored;
 
 	int m_vtxIndex;
 

@@ -1,7 +1,5 @@
 #include "..\include\Astar.h"
 
-
-
 Astar::Astar()
 {
 	m_Font.loadFromFile("arial.ttf");
@@ -11,15 +9,12 @@ Astar::Astar()
 	m_TimeText.setPosition(sf::Vector2f(900, 200));
 }
 
-Astar::~Astar()
-{
-}
-
-void Astar::update()// algorithm logic
+bool Astar::update()// algorithm logic
 {
 	if (!openSet.empty())
 	{
 		std::shared_ptr<Node> current = openSet.at(0);
+		m_cellsVisited++;
 		for (auto openit = openSet.begin(); openit != openSet.end(); openit++)
 		{
 			if (((*openit)->f >= current->f))
@@ -44,10 +39,12 @@ void Astar::update()// algorithm logic
 			std::cout << "\nManhattan distance: " << abs(m_end->x - m_start->x) + abs(m_end->y - m_start->y) + 2 << " steps.\n";
 			std::cout << "Approximate Euclidian distance: " << floor(sqrt(pow(abs(m_end->x - m_start->x + 1), 2) + pow(abs(m_end->y - m_start->y + 1), 2))) << " steps.\n";
 			std::cout << "The shortest path takes " << path.size() << " steps.\n";
+			std::cout << "Visited " << m_cellsVisited << " locations out of " << m_Rows * m_Rows - grid.numWalls<< " total.(";
+			std::cout << std::fixed << std::setprecision(2) << (((double)m_cellsVisited / (double)(m_Rows * m_Rows - grid.numWalls)) * 100) << "%)\n";
 			setOpen();
 			setClosed();
 			setPath();
-			return;
+			return(true);
 		}
 		removeFromVector(openSet, current);
 		closedSet.push_back(current);
@@ -78,7 +75,7 @@ void Astar::update()// algorithm logic
 			// This path is the best until now, Record it.
 			(*neighborit)->previous = current;
 			(*neighborit)->g = tempg;
-			(*neighborit)->f = (*neighborit)->g + heuristic((*neighborit), m_end, m_heuristicFlag);
+			(*neighborit)->f = (*neighborit)->g + heuristic((*neighborit), m_end);
 		}
 		setOpen();
 		setClosed();
@@ -91,20 +88,28 @@ void Astar::update()// algorithm logic
 		m_isSolved = false;
 		m_isDone = true;
 	}
+	return(false);
 }
 
 void Astar::render(sf::RenderWindow & window)
 {
 	m_Timer.restart();
-	window.draw(grid.m_gridDisplay);	
-	window.draw(grid.m_lines);
-	auto elapsed = m_Timer.getElapsedTime();
-	float milliseconds = elapsed.asSeconds();
-	std::string fstring = std::to_string(std::floor(1.0f / milliseconds));
-	fstring.erase(fstring.find_last_not_of('0') + 1, std::string::npos);
-	fstring.pop_back();
-	fstring += "\nRenders per second.\n";
-	m_TimeText.setString(fstring);
+	window.draw(grid.gridDisplay);	
+	window.draw(grid.lines);
+
+	//The below commented block can be used to display render calls per second.
+	//Uncomment the block, comment out lines 116, 117 & pass fstring to setString()
+	//on line 118
+
+	//auto elapsed = m_Timer.getElapsedTime();
+	//float milliseconds = elapsed.asSeconds();
+	//std::string fstring = std::to_string(std::floor(1.0f / milliseconds));
+	//fstring.erase(fstring.find_last_not_of('0') + 1, std::string::npos);
+	//fstring.pop_back();*/
+	//fstring += "\nRenders per second.\n";
+	std::string cellString = std::to_string(m_cellsVisited);
+	cellString += "\nCells visited.\n";
+	m_TimeText.setString(cellString);
 
 	window.draw(m_TimeText);
 }
@@ -131,7 +136,7 @@ void Astar::init(const bool custom)
 	grid.m_yOffSet = (720.0f / float(m_Rows)) * 0.95f;
 	grid.setNodeVertices();
 	//add nodes to closed set.
-	for (auto rowit = grid.m_Nodes.begin(); rowit != grid.m_Nodes.end(); rowit++)
+	for (auto rowit = grid.nodes.begin(); rowit != grid.nodes.end(); rowit++)
 	{
 		for (auto nodeit = rowit->begin(); nodeit != rowit->end(); nodeit++)
 		{
@@ -146,9 +151,10 @@ void Astar::init(const bool custom)
 		}
 	}
 
-	m_start->h = heuristic(m_start, m_end, m_heuristicFlag);
+	m_start->h = heuristic(m_start, m_end);
 	m_start->f = m_start->h;
 	m_start->g = 0.0;
+	//if start or end were randomly set to be walls, this fixes that.
 	m_start->wall = false;
 	m_end->wall = false;
 	openSet.push_back(m_start);
@@ -163,7 +169,8 @@ void Astar::init(const bool custom)
 			}
 		}
 	}
-	std::cout << "Number of walls: " << count << " Percentage: " << (float(count) / (float(m_Rows) * float(m_Cols))) * 100.0f << '\n';
+	grid.numWalls = count;
+	std::cout << "Number of walls: " << count << " Percentage: " << (float(count) / (float(m_Rows) * float(m_Cols))) * 100.0f << "%\n";
 }
 
 void Astar::setCustom(const int array[6])
@@ -199,20 +206,22 @@ bool Astar::vectorContains(std::vector<std::shared_ptr<Node>>& vector, std::shar
 	return(false);
 }
 
-float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b, bool flag)
+float Astar::heuristic(std::shared_ptr<Node>& a, std::shared_ptr<Node>& b)
 {
-	if (flag)
+	if (m_heuristicFlag)
 	{
 		//Euclidian Distance.
 		float d = sqrt(float(pow(abs(b->x - a->x), 2.0f)) + float(pow(abs(b->y - a->y), 2.0f)));
-		return(float(pow(d + 1.0f, 2.0f)));// returns a value of (d + 1)^2 adding additional accuracy to the heuristic
+		//return(float(pow(d + 1.0f, 2.0f)));// returns a value of (d + 1)^2 adding additional accuracy to the heuristic
+		return(d);
 	}
 	else
 	{
 		//Manhattan Distance.
 		auto dx = abs(b->x - a->x);
 		auto dy = abs(b->y - a->y);
-		return (dx > dy ? dx : dy);
+		//return (pow(dx + dy, 2));//returns (dx + dy)^2
+		return(dx + dy);
 	}
 
 }
@@ -232,7 +241,6 @@ void Astar::setOpen()
 {
 	for (auto nit = openSet.begin(); nit != openSet.end(); nit++)
 	{
-		//(*nit)->square.setFillColor(sf::Color::Green);
 		(*nit)->setColor(sf::Color(30, 255, 30));
 	}
 }
@@ -243,11 +251,9 @@ void Astar::setClosed()
 	{
 		if ((*nit)->wall)
 		{
-			//(*nit)->square.setFillColor(sf::Color::Black);
 			(*nit)->setColor(sf::Color(15, 15, 15));
 			continue;
 		}
-		//(*nit)->square.setFillColor(sf::Color::Red);
 		(*nit)->setColor(sf::Color(255, 30, 30));
 	}
 }
@@ -256,7 +262,6 @@ void Astar::setPath()
 {
 	for (auto nit = path.begin(); nit != path.end(); nit++)
 	{
-		//(*nit)->square.setFillColor(sf::Color::Blue);
 		(*nit)->setColor(sf::Color(30, 30, 255));
 	}
 }

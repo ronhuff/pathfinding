@@ -3,21 +3,7 @@
 Node::Node(int& newx, int& newy, sf::VertexArray& gridVArray)
 	: x(float(newx)), y(float(newy)), f(std::numeric_limits<float>::infinity()), g(std::numeric_limits<float>::infinity()), h(0), wall(false), m_vArray(gridVArray)
 {
-	//previous = std::make_shared<Node>();
 	previous = nullptr;
-	//square.setFillColor(sf::Color::Transparent);
-
-	float randNum = rand() % 100;
-	//std::cout << randNum << '\n';
-	if (randNum < 37) // 43% chance per node that it will be a wall.
-	{
-		wall = true;
-	}
-}
-
-Node::~Node()
-{
-
 }
 
 void Node::addNeighbors(std::vector<std::vector<std::shared_ptr<Node>>>& nodes, const int& ROWS, const int& COLS)
