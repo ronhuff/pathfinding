@@ -18,6 +18,10 @@ In order to view a quick demonstration, simply choose the default settings, othe
 
 These include grid size, start & end positions as well as the distance heuristic. I would like to allow for further configuration in the future such as tweaking the heuristic's output.
 
+![demonstration run](https://github.com/ronhuff/pathfinding/blob/master/img/demo.png)
+
+Here we can see the where the application has successfully executed the algorithm with the above settings.
+
 ### Future Features & Additions
 - Other algorithms such as Dijkstra's.
 - The ability to compare different algorithms & heuristics on the same grid/wall configuration.
